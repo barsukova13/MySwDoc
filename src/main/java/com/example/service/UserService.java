@@ -17,29 +17,29 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    @Transactional(readOnly = true)
-    public List<UserDTO> findAll() {
-        return userRepository.findAll().stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
-    public UserDTO findById(Long id) {
-        return userRepository.findById(id)
-                .map(this::convertToDTO)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-    }
-
     @Transactional
-    public UserDTO create(UserDTO userDTO) {
+    public UserDTO createUser(UserDTO userDTO) {  // Было create()
         User user = convertToEntity(userDTO);
         User savedUser = userRepository.save(user);
         return convertToDTO(savedUser);
     }
 
+    @Transactional(readOnly = true)
+    public UserDTO getUserById(Long id) {  // Было findById()
+        return userRepository.findById(id)
+                .map(this::convertToDTO)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserDTO> getAllUsers() {  // Было findAll()
+        return userRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
     @Transactional
-    public UserDTO update(Long id, UserDTO userDTO) {
+    public UserDTO updateUser(Long id, UserDTO userDTO) {  // Было update()
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -52,7 +52,7 @@ public class UserService {
     }
 
     @Transactional
-    public void delete(Long id) {
+    public void deleteUser(Long id) {  // Было delete()
         userRepository.deleteById(id);
     }
 
